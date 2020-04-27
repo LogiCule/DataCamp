@@ -81,3 +81,41 @@ SELECT code,inflation_rate, unemployment_rate
   	 FROM countries
   	 WHERE (gov_form = 'Constitutional Monarchy' OR gov_form LIKE '%Republic%'))
 ORDER BY inflation_rate;
+
+/*Final challenge*/
+
+SELECT DISTINCT c.name, total_investment, imports
+  FROM countries AS c
+    LEFT JOIN economies AS e
+      ON (e.code=c.code)
+        AND e.code IN (
+          SELECT l.code
+          FROM languages AS l
+          WHERE official = 'true'
+        )
+  WHERE region = 'Central America' AND year = 2015
+ORDER BY name;
+
+/*Final challenge (2)*/
+
+SELECT region,continent, avg(fertility_rate) AS avg_fert_rate
+  FROM countries as c
+    INNER JOIN populations as p
+      ON p.country_code=c.code
+  WHERE year = 2015
+GROUP BY region, continent
+ORDER BY avg_fert_rate;
+
+/Final challenge (3)*/
+
+SELECT name, country_code, city_proper_pop, metroarea_pop,  
+      city_proper_pop/metroarea_pop * 100.0 AS city_perc
+  FROM cities
+  WHERE name IN
+    (SELECT capital
+     FROM countries
+     WHERE (continent = 'Europe'
+        OR region LIKE '%America%'))
+       AND  metroarea_pop is not null
+ORDER BY city_perc desc
+limit 10;
