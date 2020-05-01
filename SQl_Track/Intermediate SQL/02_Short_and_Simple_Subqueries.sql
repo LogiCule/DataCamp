@@ -109,3 +109,35 @@ GROUP BY stage;
 
 /*Add a subquery in FROM*/
 
+SELECT 
+	stage,
+	ROUND(avg_goals,2) AS avg_goals
+FROM 
+	(SELECT
+		 stage,
+         avg(home_goal + away_goal) AS avg_goals
+	 FROM match
+	 WHERE season = '2012/2013'
+	 GROUP BY stage) AS s
+WHERE 
+	s.avg_goals > (SELECT avg(home_goal + away_goal) 
+                    FROM match WHERE season = '2012/2013');
+
+/*Add a subquery in SELECT*/
+
+
+SELECT 
+	s.stage,
+	ROUND(avg_goals,2) AS avg_goal,
+	(select avg(home_goal + away_goal) from match WHERE season = '2012/2013') AS overall_avg
+FROM 
+	(SELECT
+		 stage,
+         avg(home_goal + away_goal) AS avg_goals
+	 FROM match
+	 WHERE season = '2012/2013'
+	 GROUP BY stage) AS s
+WHERE 
+	s.avg_goals > (SELECT avg(home_goal + away_goal) 
+                    FROM match WHERE season = '2012/2013');
+
