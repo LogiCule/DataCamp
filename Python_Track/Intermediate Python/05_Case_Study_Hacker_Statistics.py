@@ -84,6 +84,6 @@ plt.show()
 
 #Plot the distribution
 
-ends = np_aw_t[:,-1]
+ends = np_aw_t[-1,:1]
 plt.hist(ends)
 plt.show()
