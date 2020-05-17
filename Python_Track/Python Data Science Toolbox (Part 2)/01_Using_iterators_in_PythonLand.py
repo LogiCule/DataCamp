@@ -64,3 +64,32 @@ z1 = zip(mutants,powers)
 result1, result2 = zip(*z1)
 print(result1 == mutants)
 print(result2 == powers)
+
+#Processing large amounts of Twitter data
+
+counts_dict=dict()
+for chunk in pd.read_csv("tweets.csv",chunksize=10):
+    for entry in chunk['lang']:
+        if entry in counts_dict.keys():
+            counts_dict[entry] += 1
+        else:
+            counts_dict[entry] = 1
+print(counts_dict)
+
+#Extracting information for large amounts of Twitter data
+
+def count_entries(csv_file,c_size,colname):
+    """Return a dictionary with counts of
+    occurrences as value for each key."""
+    counts_dict = {}
+    for chunk in pd.read_csv(csv_file,chunksize=c_size):
+        for entry in chunk[colname]:
+            if entry in counts_dict.keys():
+                counts_dict[entry] += 1
+            else:
+                counts_dict[entry] = 1
+    return counts_dict
+result_counts = count_entries('tweets.csv',10,'lang')
+print(result_counts)
+
+#
