@@ -71,3 +71,64 @@ with open('world_dev_ind.csv') as file:
         else:
             counts_dict[first_col] = 1
 print(counts_dict)
+
+#Writing an iterator to load data in chunks (1)
+
+import pandas as pd
+df_reader = pd.read_csv('ind_pop.csv',chunksize=10)
+print(next(df_reader))
+print(next(df_reader))
+
+#Writing an iterator to load data in chunks (2)
+
+urb_pop_reader = pd.read_csv('ind_pop_data.csv', chunksize=1000)
+df_urb_pop = next(urb_pop_reader)
+print(df_urb_pop.head())
+df_pop_ceb = df_urb_pop[df_urb_pop['CountryCode']=='CEB']
+pops = zip(df_pop_ceb['Total Population'], df_pop_ceb['Urban population (% of total)'])
+pops_list = list(pops)
+print(pops_list)
+
+#Writing an iterator to load data in chunks (3)
+
+urb_pop_reader = pd.read_csv('ind_pop_data.csv', chunksize=1000)
+df_urb_pop = next(urb_pop_reader)
+df_pop_ceb = df_urb_pop[df_urb_pop['CountryCode'] == 'CEB']
+pops = zip(df_pop_ceb['Total Population'], 
+           df_pop_ceb['Urban population (% of total)'])
+pops_list = list(pops)
+df_pop_ceb['Total Urban Population'] = [int(i[0]*i[1]*0.01) for i in pops_list]
+df_pop_ceb.plot(kind='scatter', x='Year', y='Total Urban Population')
+plt.show()
+
+#Writing an iterator to load data in chunks (4)
+
+urb_pop_reader = pd.read_csv('ind_pop_data.csv', chunksize=1000)
+data = pd.DataFrame()
+for df_urb_pop in urb_pop_reader:
+    df_pop_ceb = df_urb_pop[df_urb_pop['CountryCode'] == 'CEB']
+    pops = zip(df_pop_ceb['Total Population'],
+                df_pop_ceb['Urban population (% of total)'])
+    pops_list = list(pops)
+    df_pop_ceb['Total Urban Population'] = [int(tup[0] * tup[1] * 0.01) for tup in pops_list]
+    data = data.append(df_pop_ceb)
+data.plot(kind='scatter', x='Year', y='Total Urban Population')
+plt.show()
+
+#Writing an iterator to load data in chunks (5)
+
+def plot_pop(filename, country_code):
+    urb_pop_reader = pd.read_csv(filename, chunksize=1000)
+    data = pd.DataFrame()
+    for df_urb_pop in urb_pop_reader:
+        df_pop_ceb = df_urb_pop[df_urb_pop['CountryCode'] == country_code]
+        pops = zip(df_pop_ceb['Total Population'],
+                    df_pop_ceb['Urban population (% of total)'])
+        pops_list = list(pops)
+        df_pop_ceb['Total Urban Population'] = [int(tup[0] * tup[1] * 0.01) for tup in pops_list]
+        data = data.append(df_pop_ceb)
+    data.plot(kind='scatter', x='Year', y='Total Urban Population')
+    plt.show()
+fn = 'ind_pop_data.csv'
+plot_pop(fn,'CEB')
+plot_pop(fn,'ARB')
