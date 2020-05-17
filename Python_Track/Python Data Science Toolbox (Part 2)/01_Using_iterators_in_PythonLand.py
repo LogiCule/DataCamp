@@ -56,3 +56,11 @@ print(mutant_zip)
 for value1,value2,value3 in mutant_zip:
     print(value1, value2, value3)
     
+#Using * and zip to 'unzip'
+
+z1 = zip(mutants,powers)
+print(*z1)
+z1 = zip(mutants,powers)
+result1, result2 = zip(*z1)
+print(result1 == mutants)
+print(result2 == powers)
