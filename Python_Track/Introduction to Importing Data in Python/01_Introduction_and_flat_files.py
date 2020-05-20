@@ -43,3 +43,10 @@ plt.xlabel('time (min.)')
 plt.ylabel('percentage of larvae')
 plt.show()
 
+#Working with mixed datatypes (2)
+
+file = 'titanic.csv'
+d = np.recfromcsv(file)
+print(d[:3])
+
+#
