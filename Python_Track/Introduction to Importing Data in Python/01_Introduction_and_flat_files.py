@@ -49,4 +49,18 @@ file = 'titanic.csv'
 d = np.recfromcsv(file)
 print(d[:3])
 
-#
+#Using pandas to import flat files as DataFrames (1)
+
+file = 'titanic.csv'
+df = pd.read_csv(file)
+print(df.head())
+
+#Using pandas to import flat files as DataFrames (2)
+
+data=pd.read_csv(file,nrows=5,header=None)
+data_array=np.array(data)
+
+#Customizing your pandas import
+
+data = pd.read_csv(file, sep='\t', comment='#', na_values='Nothing')
+
