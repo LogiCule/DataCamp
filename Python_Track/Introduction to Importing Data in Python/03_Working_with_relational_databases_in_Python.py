@@ -30,3 +30,40 @@ with engine.connect() as con:
 
 #Filtering your database records using SQL's WHERE
 
+engine = create_engine('sqlite:///Chinook.sqlite')
+with engine.connect() as con:
+    rs = con.execute('select * from Employee where EmployeeId >=6')
+    df = pd.DataFrame(rs.fetchall())
+    df.columns = rs.keys()
+print(df.head())
+
+#Ordering your SQL records with ORDER BY
+
+engine = create_engine('sqlite:///Chinook.sqlite')
+with engine.connect() as con:
+    rs = con.execute('select * FROM Employee order by BirthDate')
+    df = pd.DataFrame(rs.fetchall())
+    df.columns=rs.keys()
+print(df.head())
+
+#Pandas and The Hello World of SQL Queries!
+
+engine = create_engine('sqlite:///Chinook.sqlite')
+df = pd.read_sql_query('select * from Album', engine)
+
+#Pandas for more complex querying
+
+engine = create_engine('sqlite:///Chinook.sqlite')
+df = pd.read_sql_query('select * FROM employee where EmployeeId>=6 order by BirthDate',engine)
+
+#The power of SQL lies in relationships between tables: INNER JOIN
+
+with engine.connect() as con:
+    rs = con.execute('select Title,Name from Album innner join Artist using(ArtistID)')
+    df = pd.DataFrame(rs.fetchall())
+    df.columns = rs.keys()
+print(df.head())
+
+#Filtering your INNER JOIN
+
+df = pd.read_sql_query('select * from PlaylistTrack INNER JOIN Track on PlaylistTrack.TrackId = Track.TrackId where Milliseconds < 250000',engine)
