@@ -21,3 +21,12 @@ df = pd.DataFrame(rs.fetchall())
 con.close()
 print(df.head())
 
+#Customizing the Hello World of SQL Queries
+
+with engine.connect() as con:
+    rs = con.execute('select LastName,Title from Employee')
+    df = pd.DataFrame(rs.fetchmany(3))
+    df.columns = rs.keys()
+
+#Filtering your database records using SQL's WHERE
+
