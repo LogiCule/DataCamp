@@ -37,3 +37,9 @@ pd.DataFrame.hist(df_sas[['P']])
 plt.ylabel('count')
 plt.show()
 
+#Importing Stata files
+
+df = pd.read_stata('disarea.dta')
+print(df.head())
+
+#
