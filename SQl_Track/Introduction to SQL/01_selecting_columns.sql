@@ -28,8 +28,8 @@ from films;
 select distinct country 
 from films;
 
-select distinct certification f
-rom films;
+select distinct certification 
+from films;
 
 select distinct role from roles;
 
